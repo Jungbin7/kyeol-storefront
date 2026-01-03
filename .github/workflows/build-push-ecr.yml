@@ -7,7 +7,9 @@ on:
   workflow_dispatch:
 
 env:
-  AWS_REGION: ap-southeast-2
+  AWS_REGION: ap-northeast-1
+  ECR_REPOSITORY: jung-kyeol-storefront
+  AWS_ROLE_ARN: arn:aws:iam::827913617839:role/jung-kyeol-mgmt-github-actions-role
 
 permissions:
   id-token: write
@@ -23,7 +25,7 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
@@ -39,12 +41,12 @@ jobs:
           context: .
           push: true
           build-args: |
-            NEXT_PUBLIC_SALEOR_API_URL=https://storefront1.saleor.cloud/graphql/
-            NEXT_PUBLIC_STOREFRONT_URL=https://origin-dev-kyeol.msp-g1.click
+            NEXT_PUBLIC_SALEOR_API_URL=https://dev-api.mgz-g2-u3.shop/graphql/
+            NEXT_PUBLIC_STOREFRONT_URL=https://dev.mgz-g2-u3.shop
             NEXT_PUBLIC_DEFAULT_CHANNEL=default-channel
           tags: |
-            ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:dev-latest
-            ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:dev-latest
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
