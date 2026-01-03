@@ -41,7 +41,7 @@ jobs:
           context: .
           push: true
           build-args: |
-            NEXT_PUBLIC_SALEOR_API_URL=https://dev-api.mgz-g2-u3.shop/graphql/
+            NEXT_PUBLIC_SALEOR_API_URL=https://storefront1.saleor.cloud/graphql/
             NEXT_PUBLIC_STOREFRONT_URL=https://dev.mgz-g2-u3.shop
             NEXT_PUBLIC_DEFAULT_CHANNEL=default-channel
           tags: |
